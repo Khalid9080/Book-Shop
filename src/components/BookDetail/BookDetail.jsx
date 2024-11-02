@@ -1,5 +1,6 @@
 
 import { useLoaderData, useParams } from "react-router-dom";
+import { addToaStoreReadList, addToaStoreWishList } from "../../Utility/addToDB";
 
 const BookDetail = () => {
     const { bookId } = useParams(); //bookId param ta dhorsi jeta main.jsx theke ashce
@@ -9,6 +10,20 @@ const BookDetail = () => {
     const data = useLoaderData()  // data load korar jonno use korbo
     const book = data.find(book => book.bookId === id);
 
+    const handleMarkAsRead = (id) => {
+        /*
+        - snderstand what to store: amra bokId store korbo
+        - where to store: databse/local storage e store korbo
+        - array, list, collection e store korbo 
+        - check if already read or not, 
+        - if read, then do not add/remove from the list
+        - if not read, then add to the readlist
+        */
+
+        addToaStoreReadList(id);
+        addToaStoreWishList(id);
+
+    }
 
     const { bookId: currentBookId, image, bookName, author, category, review, tags, totalPages, publisher, yearOfPublishing, rating } = book;
 
@@ -35,14 +50,19 @@ const BookDetail = () => {
                 </div>
 
                 <div className="mt-2">
-                    <div ><p> <span className="font-bold text-base">Review :</span> {review}</p></div>
-                    <div className="mt-2 ">
-                        <p> <span className="font-bold text-base">Tag :</span> {tags.map((tag, id) => (
-                            <div key={id} className="btn btn-sm badge p-3 work-sans text-green-700 ">{tag}</div>))}
+                    <div><p><span className="font-bold text-base">Review :</span> {review}</p></div>
+                    <div className="mt-2">
+                        <p>
+                            <span className="font-bold text-base">Tags :</span>
+                            {tags.map((tag, id) => (
+                                <span key={id} className="btn btn-sm badge p-3 work-sans text-green-700">{tag}</span>
+                            ))}
                         </p>
                     </div>
                     <div className="border-b-2 mt-4"></div>
                 </div>
+
+
                 <div className="mt-2">
                     <div><p> <span className="font-semibold">Number of Pages : </span>{totalPages}</p></div>
                     <div><p> <span className="font-semibold">Publisher : </span>{publisher}</p></div>
@@ -50,8 +70,8 @@ const BookDetail = () => {
                     <div><p className="gap-2 font-semibold">Rating: {rating} <i className="fa-regular fa-star-half-stroke  text-amber-500"></i></p></div>
                 </div>
                 <div className="mt-10 space-x-4">
-                    <button className="btn border-2 border-[#83b28c] px-4 text-base">Read</button>
-                    <button className="btn bg-[#83b28c] px-6text-base">WishList </button>
+                    <button onClick={() => handleMarkAsRead(bookId)} className="btn border-2 border-[#83b28c] px-4 text-base">Mark as Read</button>
+                    <button onClick={() => handleMarkAsRead(bookId)} className="btn bg-[#83b28c] px-6text-base">Add to WishList </button>
                 </div>
             </div>
 
